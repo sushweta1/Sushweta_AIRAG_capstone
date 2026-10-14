@@ -1,0 +1,17 @@
+Pydantic models are used in API request validation for several reasons:
+
+1. **Data Validation**: Pydantic automatically validates incoming data types and values, ensuring that the data conforms to expected formats.
+
+2. **Type Safety**: It provides strong typing, which helps catch errors early in the development process.
+
+3. **Automatic Parsing**: Pydantic can parse and coerce data types, converting strings to integers, dates, etc., as needed.
+
+4. **Clear Error Messages**: When validation fails, Pydantic generates clear and informative error messages, making it easier to debug issues.
+
+5. **Serialization/Deserialization**: It simplifies the process of converting data to and from JSON, making it easier to work with API requests and responses.
+
+6. **Documentation**: Pydantic models can be easily integrated with frameworks like FastAPI to generate automatic API documentation.
+
+7. **Nested Models**: It supports complex data structures with nested models, allowing for more sophisticated validation scenarios.
+
+Overall, Pydantic enhances the robustness and maintainability of API applications.

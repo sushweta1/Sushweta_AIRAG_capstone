@@ -1,0 +1,24 @@
+Dependency injection in FastAPI is a design pattern that allows you to manage dependencies in your application more effectively. It enables you to define functions or classes that provide the necessary resources (like database connections, configurations, or services) to your route handlers.
+
+In FastAPI, you can declare dependencies using the `Depends` function. This allows you to:
+
+1. **Reuse code**: Share common logic across multiple routes.
+2. **Manage lifecycle**: Control the creation and destruction of resources.
+3. **Improve testability**: Easily mock dependencies in tests.
+
+Here's a simple example:
+
+```python
+from fastapi import FastAPI, Depends
+
+app = FastAPI()
+
+def get_query_param(q: str = None):
+    return q
+
+@app.get("/items/")
+async def read_items(query: str = Depends(get_query_param)):
+    return {"query": query}
+```
+
+In this example, `get_query_param` is a dependency that provides the `query` parameter to the `read_items` route.

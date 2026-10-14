@@ -1,0 +1,1 @@
+# W5 evaluation package: golden set validation, LLM judge, and evaluation runner.

@@ -1,0 +1,332 @@
+{
+  "summary": {
+    "v1_wins": 5,
+    "v2_wins": 4,
+    "ties": 2,
+    "ambiguous": 9,
+    "wall_clock_seconds": 153.43,
+    "position_bias_rate": 30.0
+  },
+  "results": [
+    {
+      "id": "g001",
+      "question": "How do you declare a request body in FastAPI?",
+      "ideal_answer": "Declare a Pydantic model and use that model as a parameter in the path operation function. FastAPI will recognize the Pydantic model parameter as request-body data and validate the incoming data against the model.",
+      "answer_v1": "In FastAPI, you declare a request body using Pydantic models. First, create a class that inherits from `BaseModel`, defining the expected fields and their types. Then, include this model as a parameter in your route function, using it as a type hint. FastAPI automatically parses the incoming JSON request body into an instance of this model. For example:\n\n```python\nfrom fastapi import FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\nclass Item(BaseModel):\n    name: str\n    price: float\n\n@app.post(\"/items/\")\nasync def create_item(item: Item):\n    return item\n```",
+      "answer_v2": "In FastAPI, you declare a request body by creating a Pydantic model that defines the structure of the body. You then use this model as a type hint for a parameter in your path operation function. FastAPI will automatically read the body of the request, validate it against the Pydantic model, and convert it into the corresponding Python data type. For example:\n\n```python\nfrom fastapi import FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\nclass Item(BaseModel):\n    name: str\n    price: float\n\n@app.post(\"/items/\")\ndef create_item(item: Item):\n    return item\n```",
+      "forward": {
+        "winner": "tie",
+        "reasoning": "Both answers A and B accurately describe how to declare a request body in FastAPI using Pydantic models. They both provide a clear explanation and an example that aligns with the expected answer. Both answers mention creating a Pydantic model, using it as a parameter in the path operation function, and FastAPI's automatic handling of the request body. The differences between the answers are minimal and do not affect their correctness or relevance to the expected answer."
+      },
+      "reverse": {
+        "winner": "tie",
+        "reasoning": "Both answers A and B accurately describe how to declare a request body in FastAPI using a Pydantic model. They both provide a clear and relevant explanation, including an example that demonstrates the process. The differences between the answers are minimal and do not affect their correctness or clarity. Both answers appropriately handle the question within the scope of FastAPI documentation and do not rely on general knowledge outside of it. Therefore, both answers are equally good in terms of accuracy, groundedness, relevance, and clarity."
+      },
+      "overall_winner": "tie"
+    },
+    {
+      "id": "g002",
+      "question": "How does FastAPI identify and validate path parameters?",
+      "ideal_answer": "A variable declared in the route path, such as {item_id}, is treated as a path parameter. If the corresponding function parameter has a Python type annotation, such as item_id: int, FastAPI converts and validates the incoming value against that type.",
+      "answer_v1": "FastAPI identifies and validates path parameters through type hints provided in the function signature of the endpoint. When defining a route, you can specify parameters in the path enclosed in curly braces (e.g., `/{param_name}`). FastAPI automatically maps these parameters to the function\u2019s arguments and performs validation based on the type hints. If a parameter's type is an integer, string, etc., FastAPI checks the incoming request against these types, returning an error if the validation fails.",
+      "answer_v2": "FastAPI identifies and validates path parameters through the use of type hints in the function signature of a path operation. When you declare a path parameter in the route declaration (for example, `@app.get('/items/{item_id}')`), FastAPI automatically extracts this parameter from the URL and matches it to the function argument `item_id`. Furthermore, by assigning a specific type to the parameter, such as `int` or `str`, FastAPI validates the incoming data type and gives a 422 Unprocessable Entity error if the input does not conform to the specified type.",
+      "forward": {
+        "winner": "B",
+        "reasoning": "Both answers correctly describe how FastAPI identifies and validates path parameters using type hints in the function signature. However, Answer B provides a more precise explanation by mentioning the specific error code (422 Unprocessable Entity) that FastAPI returns if the input does not conform to the specified type. This detail aligns with the expected answer's emphasis on validation against the type. Answer A is accurate but lacks this specific detail, making Answer B slightly more aligned with the expected answer in terms of accuracy and clarity."
+      },
+      "reverse": {
+        "winner": "A",
+        "reasoning": "Both answers A and B correctly describe how FastAPI identifies and validates path parameters using type hints in the function signature. However, Answer A provides a slightly more detailed explanation by mentioning the specific error (422 Unprocessable Entity) that FastAPI returns if the input does not conform to the specified type. This detail aligns with the expected answer's focus on conversion and validation against the type. Therefore, Answer A is more accurate and relevant to the expected answer."
+      },
+      "overall_winner": "v2"
+    },
+    {
+      "id": "g003",
+      "question": "How does FastAPI determine that a function parameter is a query parameter?",
+      "ideal_answer": "Function parameters that are not part of the route path are interpreted as query parameters when they are simple types such as str, int, float, or bool. FastAPI parses, converts, validates, and documents them automatically.",
+      "answer_v1": "FastAPI determines that a function parameter is a query parameter based on its position in the function definition and type hints provided. When you define a function for a route, parameters that are not explicitly defined as part of the path and lack a default value are treated as query parameters. The parameter's type annotation (like `str`, `int`, etc.) also helps FastAPI validate and convert the input data accordingly. Additionally, parameters with default values are optional and will be set as query parameters if they're not included in the URL directly.",
+      "answer_v2": "FastAPI determines that a function parameter is a query parameter based on the function signature. If a parameter is defined in the function signature without a type hint that indicates it should be retrieved from a different source (like `Body`, `Path`, or `Header`), FastAPI assumes it is a query parameter. Additionally, the parameters are expected to have types defined with Pydantic or directly without any special attributes for them to be recognized as query parameters.",
+      "forward": {
+        "winner": "A",
+        "reasoning": "Answer A better matches the expected answer in terms of accuracy and relevance. It correctly identifies that parameters not part of the route path are treated as query parameters and mentions the role of type annotations in validation and conversion, aligning closely with the expected answer. Answer B, while also mentioning the function signature, introduces unnecessary complexity by discussing Pydantic and special attributes, which are not part of the expected answer. Therefore, Answer A is more aligned with the expected answer's focus on simple types and automatic handling by FastAPI."
+      },
+      "reverse": {
+        "winner": "B",
+        "reasoning": "Both answers address how FastAPI determines query parameters, but Answer B aligns more closely with the expected answer. \n\n- **Accuracy**: Both answers are accurate, but Answer B more explicitly mentions that parameters not part of the path are treated as query parameters, which is a key point in the expected answer.\n- **Groundedness**: Both answers are grounded in FastAPI's behavior, but Answer B provides a clearer explanation of how parameters are treated based on their position and type hints.\n- **Relevance**: Answer B is more relevant as it directly addresses the expected answer's focus on parameters not being part of the route path.\n- **Clarity**: Answer B is clearer in explaining the role of type annotations and default values in determining query parameters.\n\nOverall, Answer B better matches the expected answer in terms of relevance and clarity, making it the better choice."
+      },
+      "overall_winner": "v1"
+    },
+    {
+      "id": "g004",
+      "question": "What is dependency injection in FastAPI and how is Depends used?",
+      "ideal_answer": "Dependency injection lets a path operation declare functionality or values it requires. You pass a dependency function to Depends without calling the function yourself, and FastAPI calls the dependency for each request, resolves its parameters, and passes its result into the path operation.",
+      "answer_v1": "Dependency Injection in FastAPI is a design pattern that allows for the management of dependencies and configurations needed by a function or component, making code easier to manage and test. In FastAPI, the `Depends` function is used to declare and register dependencies, which can be functions or classes that provide specific functionality (like database access, authentication, etc.) to path operation functions, allowing FastAPI to automatically resolve these dependencies as needed during request handling.",
+      "answer_v2": "Dependency injection in FastAPI is a way to provide dependencies or shared logic to the route handlers. It allows for cleaner code and easier testing by decoupling components. The `Depends` function is used to declare dependencies in FastAPI; when you specify a function as a dependency for a path operation, FastAPI will call that function and provide its return value as an argument to the path operation function.",
+      "forward": {
+        "winner": "B",
+        "reasoning": "Both answers describe dependency injection and the use of `Depends` in FastAPI, but Answer B is more aligned with the expected answer in terms of accuracy and clarity. \n\n- **Accuracy**: Answer B accurately describes that `Depends` is used to declare dependencies and that FastAPI calls the dependency function and provides its return value to the path operation. This matches the expected answer's description of how FastAPI resolves and passes the result of the dependency function.\n\n- **Groundedness**: Both answers are grounded in the context of FastAPI, but Answer B is more precise in explaining the mechanism of `Depends`.\n\n- **Relevance**: Both answers are relevant, but Answer B is more concise and directly addresses the question.\n\n- **Clarity**: Answer B is clearer in explaining the process of how `Depends` works in FastAPI.\n\n- **Handling of Out-of-Scope Questions**: This criterion is not applicable here as both answers are within scope.\n\nOverall, Answer B better matches the expected answer by providing a clear and accurate explanation of dependency injection and the use of `Depends` in FastAPI."
+      },
+      "reverse": {
+        "winner": "A",
+        "reasoning": "Both answers describe dependency injection and the use of `Depends` in FastAPI, but Answer A is more aligned with the expected answer in terms of accuracy and relevance. Answer A correctly emphasizes that FastAPI calls the dependency for each request and passes its result into the path operation, which is a key aspect mentioned in the expected answer. Answer B, while also correct, focuses more on the general benefits of dependency injection and does not explicitly mention the process of FastAPI calling the dependency for each request, which is a crucial detail in the expected answer. Therefore, Answer A better matches the expected answer."
+      },
+      "overall_winner": "v2"
+    },
+    {
+      "id": "g005",
+      "question": "What does a response model or return type do in FastAPI?",
+      "ideal_answer": "A response model or supported return type lets FastAPI validate returned data, generate the response JSON Schema for OpenAPI documentation, serialize the response, and filter the output to the declared response structure. If both a return type and response_model are declared, response_model takes priority.",
+      "answer_v1": "In FastAPI, a response model, or return type, is used to define the structure of the response that an endpoint will return. By specifying a response model, you ensure that the output adheres to a particular schema, which enhances clarity and enforces type checking. This allows clients to know what data to expect, facilitates automatic generation of API documentation, and helps in validating response data.",
+      "answer_v2": "In FastAPI, a response model or return type defines the structure of the response data that the API endpoint will return. It allows you to specify the expected data format, validate the data, and automatically generate documentation for the API. This helps in ensuring consistency and clarity in the API responses, making it easier for clients to understand the data they will receive.",
+      "forward": {
+        "winner": "A",
+        "reasoning": "Both answers A and B correctly describe the purpose of a response model or return type in FastAPI, including defining the response structure, validating data, and generating documentation. However, Answer A is slightly more aligned with the expected answer as it mentions the enforcement of type checking and the adherence to a particular schema, which aligns with the expected answer's emphasis on validation and filtering the output to the declared response structure. Answer A also hints at the priority of response_model over return type, which is a subtle but important detail in the expected answer. Therefore, Answer A is more accurate and relevant to the expected answer."
+      },
+      "reverse": {
+        "winner": "A",
+        "reasoning": "Both answers A and B correctly describe the purpose of a response model or return type in FastAPI, including defining the response structure, validating data, and generating documentation. However, Answer A is slightly more aligned with the expected answer as it mentions 'serialize the response' and 'filter the output to the declared response structure,' which are closer to the expected answer's details. Answer B focuses more on schema adherence and type checking, which are relevant but less emphasized in the expected answer. Therefore, Answer A better matches the expected answer in terms of accuracy and relevance."
+      },
+      "overall_winner": "ambiguous"
+    },
+    {
+      "id": "g006",
+      "question": "When should you define a FastAPI path operation function with async def?",
+      "ideal_answer": "Use async def when the code inside the path operation uses libraries that must be awaited with await. FastAPI supports both async def and normal def path operation functions, so normal def can be used when the code does not support await.",
+      "answer_v1": "You should define a FastAPI path operation function with `async def` when you're performing I/O-bound operations, such as database queries, network calls, or file operations that can benefit from asynchronous execution. Using `async def` allows the server to handle other requests while waiting for these operations to complete, improving the responsiveness and performance of your application, especially under high-load scenarios.",
+      "answer_v2": "You should define a FastAPI path operation function with `async def` when you want to handle I/O-bound operations asynchronously. This includes scenarios where your function needs to perform tasks like making database queries, calling external APIs, or handling file operations. Using `async def` allows FastAPI to manage concurrent requests more efficiently, improving the performance of your application.",
+      "forward": {
+        "winner": "B",
+        "reasoning": "Both answers A and B correctly identify that 'async def' should be used for I/O-bound operations. However, Answer B is more aligned with the expected answer as it focuses on the need to handle I/O-bound operations asynchronously, which is the core reason for using 'async def'. Answer A, while accurate, emphasizes performance and responsiveness under high-load scenarios, which is not explicitly mentioned in the expected answer. Answer B is more concise and directly relevant to the expected answer's focus on the use of 'await' with libraries."
+      },
+      "reverse": {
+        "winner": "tie",
+        "reasoning": "Both answers A and B provide similar explanations for when to use `async def` in FastAPI path operations. They both mention using `async def` for I/O-bound operations like database queries, network calls, or file operations, which aligns with the expected answer's mention of using `async def` when libraries must be awaited. Neither answer explicitly mentions the use of `normal def` when await is not needed, but they both correctly identify scenarios where `async def` is beneficial. Therefore, both answers are equally relevant, accurate, and clear in the context of the expected answer."
+      },
+      "overall_winner": "ambiguous"
+    },
+    {
+      "id": "g007",
+      "question": "How do you raise an HTTP error in FastAPI?",
+      "ideal_answer": "Import HTTPException from fastapi and raise it with an appropriate status_code and detail. Raising HTTPException immediately stops normal processing of the request and sends the HTTP error response to the client.",
+      "answer_v1": "In FastAPI, you can raise an HTTP error by using the `HTTPException` class from `fastapi`. For example, if you want to raise a 404 Not Found error, you can do so by using `raise HTTPException(status_code=404, detail=\"Item not found\")` within your route. This method allows you to specify both the status code and a descriptive message to send in the response.",
+      "answer_v2": "In FastAPI, you can raise an HTTP error by using the `HTTPException` class from `fastapi`. You simply need to import `HTTPException` and then raise it with a specified status code and optional detail message. For example:\n\n```python\nfrom fastapi import FastAPI, HTTPException\n\napp = FastAPI()\n\n@app.get(\"/items/{item_id}\")\nasync def read_item(item_id: int):\n    if item_id != 3:\n        raise HTTPException(status_code=404, detail=\"Item not found\")\n    return {\"item_id\": item_id}\n``` \nThis code raises a 404 error if the requested item ID is not 3.",
+      "forward": {
+        "winner": "A",
+        "reasoning": "Both answers correctly explain how to raise an HTTP error in FastAPI using the HTTPException class, aligning with the expected answer. However, Answer A is more concise and directly addresses the question without additional context or examples that are not necessary for understanding the core concept. Answer B includes an example with additional code that, while informative, is not required to meet the expected answer's criteria. Therefore, Answer A is more relevant and clear in the context of the expected answer."
+      },
+      "reverse": {
+        "winner": "A",
+        "reasoning": "Both answers correctly describe how to raise an HTTP error in FastAPI using the HTTPException class. However, Answer A provides a complete example with code, demonstrating the import of HTTPException, the creation of a FastAPI app, and the use of HTTPException within a route. This aligns well with the expected answer's emphasis on importing HTTPException and raising it with a status code and detail. Answer B, while accurate, is less detailed and does not provide a code example, making it slightly less clear and grounded compared to Answer A."
+      },
+      "overall_winner": "ambiguous"
+    },
+    {
+      "id": "g008",
+      "question": "How can you make a query parameter optional in FastAPI?",
+      "ideal_answer": "Give the query parameter a default value of None and use an appropriate optional type annotation. Because the parameter has a default value, FastAPI does not require the client to provide it.",
+      "answer_v1": "In FastAPI, you can make a query parameter optional by providing a default value for the parameter or by using `Optional` from the `typing` module. For example, if you want to make a query parameter `q` optional, you can define it as `q: Optional[str] = None` or simply `q: str = None`. This way, if the parameter is not provided in the request, it defaults to `None`.",
+      "answer_v2": "In FastAPI, you can make a query parameter optional by setting a default value for it. You can do this by assigning a default value of `None` (or any other default value) in the function parameter. For example, you can declare it as `param: str = None` in the endpoint definition. If the parameter is not provided in the query string, it will take the default value you specified.",
+      "forward": {
+        "winner": "A",
+        "reasoning": "Both answers correctly explain how to make a query parameter optional in FastAPI by setting a default value of None. However, Answer A is more accurate and grounded because it explicitly mentions the use of the `Optional` type from the `typing` module, which aligns with the expected answer's mention of using an appropriate optional type annotation. Answer B, while correct, does not mention the use of `Optional`, making Answer A more aligned with the expected answer in terms of accuracy and groundedness."
+      },
+      "reverse": {
+        "winner": "B",
+        "reasoning": "Both answers correctly explain how to make a query parameter optional in FastAPI by setting a default value. However, Answer B is more aligned with the expected answer as it explicitly mentions using `Optional` from the `typing` module, which is part of the expected answer's explanation. Answer A only mentions setting a default value and does not reference the use of `Optional`, making Answer B more accurate and relevant to the expected answer."
+      },
+      "overall_winner": "v1"
+    },
+    {
+      "id": "g009",
+      "question": "How can you test a FastAPI application without running a separate HTTP server?",
+      "ideal_answer": "Use FastAPI's TestClient, create it with the FastAPI application, and make requests to the application through the client in your tests. TestClient can be used with normal pytest test functions without running a separate server.",
+      "answer_v1": "You can test a FastAPI application without running a separate HTTP server by using the `TestClient` class provided by FastAPI. This enables you to make requests to your application in a synchronous way, simulating how the API would be called without the overhead of starting an actual server. You can also use tools like `pytest` along with the `TestClient` to run your tests smoothly in a testing environment.",
+      "answer_v2": "You can test a FastAPI application without running a separate HTTP server by using the TestClient provided by FastAPI. The TestClient allows you to create test cases for your endpoints directly in Python, enabling you to make requests to the application without needing to start the server. You can import TestClient from fastapi.testclient and instantiate it with your FastAPI app instance, then use methods like `get`, `post`, etc., to simulate HTTP requests.",
+      "forward": {
+        "winner": "A",
+        "reasoning": "Both answers correctly identify the use of FastAPI's TestClient to test applications without running a separate HTTP server. However, Answer A is slightly more aligned with the expected answer in terms of clarity and relevance. It explicitly mentions the use of pytest, which is part of the expected answer, and emphasizes the synchronous nature of the TestClient, which aligns with the expected answer's focus on making requests through the client in tests. Answer B, while accurate, does not mention pytest and focuses more on the mechanics of using TestClient, which is less aligned with the expected answer's emphasis."
+      },
+      "reverse": {
+        "winner": "A",
+        "reasoning": "Both answers correctly identify the use of FastAPI's TestClient to test applications without running a separate HTTP server. However, Answer A provides a more detailed explanation of how to use TestClient, including the specific methods (`get`, `post`, etc.) that can be used to simulate HTTP requests. This makes Answer A slightly more accurate and clear in terms of practical application. Answer B mentions the use of pytest, which is also relevant, but Answer A's mention of specific methods adds more clarity to the testing process."
+      },
+      "overall_winner": "ambiguous"
+    },
+    {
+      "id": "g010",
+      "question": "What automatic interactive API documentation does FastAPI provide by default?",
+      "ideal_answer": "FastAPI automatically provides interactive Swagger UI documentation at /docs and alternative ReDoc documentation at /redoc, based on the application's generated OpenAPI schema.",
+      "answer_v1": "FastAPI provides two automatic interactive API documentation interfaces by default: Swagger UI and ReDoc. Swagger UI offers a user-friendly platform to visualize and test the API, while ReDoc provides a more concise and professional presentation style. Both interfaces are generated automatically based on the API endpoints defined in the FastAPI application, making it easy for developers to explore and understand the API functionality.",
+      "answer_v2": "FastAPI automatically generates interactive API documentation using Swagger UI and ReDoc. Swagger UI allows users to visualize and interact with the API's endpoints directly in the browser, while ReDoc provides a clean, customizable documentation interface. Both of these documentation options are automatically available when you create an API with FastAPI.",
+      "forward": {
+        "winner": "B",
+        "reasoning": "Both answers correctly identify that FastAPI provides Swagger UI and ReDoc for interactive API documentation. However, Answer B is more aligned with the expected answer as it emphasizes the automatic generation of these interfaces and their availability by default, which is a key aspect of the expected answer. Answer A, while accurate, adds additional details about the user-friendliness and presentation style, which are not part of the expected answer. Therefore, Answer B is more relevant and appropriately focused on the expected details."
+      },
+      "reverse": {
+        "winner": "B",
+        "reasoning": "Both answers correctly identify Swagger UI and ReDoc as the automatic interactive API documentation provided by FastAPI. However, Answer B more closely aligns with the expected answer by explicitly mentioning that these interfaces are provided by default and are based on the API endpoints defined in the FastAPI application. This aligns with the expected answer's mention of the application's generated OpenAPI schema. Answer A, while accurate, does not explicitly mention the default nature or the basis on the application's schema, making Answer B slightly more relevant and accurate."
+      },
+      "overall_winner": "ambiguous"
+    },
+    {
+      "id": "g011",
+      "question": "How do you declare a required query parameter in FastAPI?",
+      "ideal_answer": "Declare the query parameter without providing a default value. FastAPI then treats it as required and returns a validation error if the client does not provide it.",
+      "answer_v1": "In FastAPI, you declare a required query parameter by including it as a function argument in your endpoint function, with type hints. FastAPI automatically treats function parameters as query parameters unless specified otherwise. By default, all parameters are required unless you set a default value. Here\u2019s an example: `@app.get('/items/') def read_item(item_id: int): return {'item_id': item_id}`. In this case, `item_id` is a required query parameter.",
+      "answer_v2": "In FastAPI, you declare a required query parameter by adding it as a function parameter in your path operation function, using the parameter's type. By default, all parameters declared in this way are treated as required unless explicitly marked as optional, for example, by using `Optional` from the `typing` module or by setting a default value. Here's an example: `@app.get(\"/items/\") def read_item(q: str):` makes `q` a required query parameter.",
+      "forward": {
+        "winner": "A",
+        "reasoning": "Both answers correctly explain how to declare a required query parameter in FastAPI by stating that parameters are required unless a default value is provided. However, Answer A provides a clearer and more direct example that aligns closely with the expected answer. It explicitly mentions that FastAPI treats function parameters as query parameters and provides a straightforward example with `item_id`. Answer B, while also correct, introduces additional information about using `Optional` from the `typing` module, which is not necessary for understanding how to declare a required query parameter. Therefore, Answer A is more relevant and clear in this context."
+      },
+      "reverse": {
+        "winner": "A",
+        "reasoning": "Both answers correctly explain that a query parameter is required if no default value is provided. However, Answer A is more accurate and relevant because it explicitly mentions the use of the `Optional` type from the `typing` module to mark parameters as optional, which aligns with the expected answer's emphasis on not providing a default value to make a parameter required. Answer B, while correct, uses an example that might be misleading as it doesn't clearly distinguish between path and query parameters, potentially causing confusion. Therefore, Answer A better matches the expected answer in terms of accuracy, relevance, and clarity."
+      },
+      "overall_winner": "ambiguous"
+    },
+    {
+      "id": "g012",
+      "question": "How can you add validation constraints to a FastAPI query parameter?",
+      "ideal_answer": "Use FastAPI's Query together with type annotations to declare validation rules such as minimum or maximum length, numerical limits, patterns, and other metadata. FastAPI applies these rules when validating incoming requests.",
+      "answer_v1": "In FastAPI, you can add validation constraints to query parameters using Pydantic models or directly through type hints with additional arguments. For example, you can specify `min_length`, `max_length`, or `gt`, `lt`, etc., for numeric or string fields right in the function signature. Here's a quick example:\n\n```python\nfrom fastapi import FastAPI, Query\n\napp = FastAPI()\n\n@app.get(\"/items/\")\nasync def read_items(q: str = Query(..., min_length=3, max_length=50)):\n    return q\n```  \nThis enforces that the query parameter `q` must be between 3 and 50 characters long.",
+      "answer_v2": "In FastAPI, you can add validation constraints to query parameters using Pydantic models or directly through function parameters. For example, you can specify type hints, default values, and constraints like `min_length` or `max_length` for string parameters. For numeric parameters, you can use constraints like `ge` (greater than or equal to) or `lt` (less than). FastAPI will automatically validate the query parameters based on these declarations and return a 422 Unprocessable Entity response if validation fails.",
+      "forward": {
+        "winner": "A",
+        "reasoning": "Both answers A and B correctly describe how to add validation constraints to FastAPI query parameters using type hints and additional arguments like `min_length` and `max_length`. However, Answer A provides a specific example using the `Query` class, which is directly aligned with the expected answer's mention of using FastAPI's `Query` together with type annotations. Answer B, while accurate, does not explicitly mention the `Query` class, which is a key part of the expected answer. Therefore, Answer A better matches the expected answer in terms of accuracy and relevance."
+      },
+      "reverse": {
+        "winner": "B",
+        "reasoning": "Both answers A and B correctly describe how to add validation constraints to FastAPI query parameters using type hints and additional arguments like `min_length` and `max_length`. However, Answer B provides a code example that directly demonstrates the use of FastAPI's `Query` to enforce validation constraints, which aligns more closely with the expected answer's emphasis on using `Query` together with type annotations. This makes Answer B more relevant and clear in illustrating the expected method of adding validation constraints."
+      },
+      "overall_winner": "v1"
+    },
+    {
+      "id": "g013",
+      "question": "How do you receive multiple related body fields in a FastAPI request?",
+      "ideal_answer": "Define the related fields in a Pydantic model and declare that model as a parameter of the path operation function. FastAPI reads the request body, validates it against the model, and provides the validated model instance to the function.",
+      "answer_v1": "In FastAPI, you can receive multiple related body fields by using Pydantic models to define the structure of the request body. You can create a Pydantic model that contains the related fields as attributes, allowing you to pass complex data structures in JSON format. Here's a simple example:\n\n```python\nfrom fastapi import FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\nclass User(BaseModel):\n    name: str\n    age: int\n    email: str\n\n@app.post(\"/users/\")\nasync def create_user(user: User):\n    return user\n```\n\nIn this example, the `create_user` endpoint accepts a JSON body with `name`, `age`, and `email` fields that are automatically validated against the `User` model.",
+      "answer_v2": "In FastAPI, you can receive multiple related body fields by defining a Pydantic model that includes all the relevant fields. You can then use this model as the request body type in your route handler. For example:\n\n```python\nfrom fastapi import FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\nclass Item(BaseModel):\n    name: str\n    price: float\n    description: str = None\n\n@app.post(\"/items/\")\nasync def create_item(item: Item):\n    return item\n```\nIn this example, the `Item` model contains multiple fields that are received in the request body.",
+      "forward": {
+        "winner": "A",
+        "reasoning": "Both answers correctly describe how to receive multiple related body fields in a FastAPI request using Pydantic models. However, Answer A provides a more detailed explanation by explicitly mentioning that FastAPI reads the request body, validates it against the model, and provides the validated model instance to the function. This aligns more closely with the expected answer, which emphasizes the validation process. Additionally, Answer A includes an example that directly mirrors the expected answer's explanation, making it slightly more relevant and clear in this context."
+      },
+      "reverse": {
+        "winner": "tie",
+        "reasoning": "Both answers A and B correctly explain how to receive multiple related body fields in a FastAPI request by using a Pydantic model. They both provide accurate, grounded, and relevant information, and include clear examples demonstrating the concept. Neither answer goes out of scope, and both handle the question appropriately. Therefore, both answers are equally good in terms of accuracy, groundedness, relevance, and clarity."
+      },
+      "overall_winner": "ambiguous"
+    },
+    {
+      "id": "g014",
+      "question": "How can the same FastAPI dependency be reused across multiple path operations?",
+      "ideal_answer": "Define the shared logic as a dependency function and declare it with Depends in each path operation that needs it. FastAPI resolves the dependency when handling each request, allowing the shared logic to be reused without duplicating it in every path operation.",
+      "answer_v1": "In FastAPI, you can reuse the same dependency across multiple path operations by defining the dependency as a callable function or a class method. When you define a dependency function, you can use it in multiple path operations by including it in the `dependencies` parameter of the route decorators, such as `@app.get()` or `@app.post()`. For example:\n\n```python\nfrom fastapi import Depends, FastAPI\n\napp = FastAPI()\n\ndef common_dependency():\n    return \"This is a reusable dependency\"\n\n@app.get(\"/operation1\")\nasync def operation1(dependency_result: str = Depends(common_dependency)):\n    return dependency_result\n\n@app.get(\"/operation2\")\nasync def operation2(dependency_result: str = Depends(common_dependency)):\n    return dependency_result\n```\n\nThis way, `common_dependency` will be executed for both `/operation1` and `/operation2`, providing consistent behavior and reducing code duplication.",
+      "answer_v2": "In FastAPI, you can create a dependency function and then reuse it across multiple path operations by passing it as a parameter in the path operation decorator. For example, you can define your dependency as a normal function, and then use it in multiple route handlers by including it in the path operation decorators such as `@app.get()`, `@app.post()`, etc. Additionally, you can include the dependency in other dependencies' parameters to ensure modularity and reusability.",
+      "forward": {
+        "winner": "A",
+        "reasoning": "Both answers correctly describe how to reuse a FastAPI dependency across multiple path operations by defining a dependency function and using it with the Depends mechanism. However, Answer A provides a clear and specific example with code, demonstrating exactly how to implement this in practice. This enhances clarity and relevance, making it easier for the reader to understand and apply the concept. Answer B, while accurate, is more general and lacks the specific example that Answer A provides. Therefore, Answer A better matches the expected answer in terms of clarity and practical application."
+      },
+      "reverse": {
+        "winner": "B",
+        "reasoning": "Both answers correctly describe how to reuse a FastAPI dependency across multiple path operations by defining a dependency function and using it with `Depends`. However, Answer B provides a clear and concise example that directly illustrates the expected answer's explanation. This example enhances clarity and relevance by showing exactly how the dependency is reused in multiple path operations, aligning well with the expected answer's focus on reusability without duplication. Answer A, while accurate, lacks this illustrative example and is slightly less clear in its explanation. Therefore, Answer B better matches the expected answer in terms of clarity and relevance."
+      },
+      "overall_winner": "v1"
+    },
+    {
+      "id": "g015",
+      "question": "A FastAPI endpoint has item_id in the URL path, q as an optional string parameter, and item as a Pydantic model parameter. Where does FastAPI expect each value to come from?",
+      "ideal_answer": "FastAPI takes item_id from the URL path because it is declared in the route path, q from the query string because it is a simple parameter not present in the path, and item from the request body because it is declared as a Pydantic model.",
+      "answer_v1": "In FastAPI, the `item_id` in the URL path is expected to come from the URL itself, acting as a path parameter. The `q` parameter, being optional, is expected to be provided as a query parameter in the URL. The `item`, defined as a Pydantic model, is expected to be passed in the body of the request, typically in JSON format. Each of these components has a specific source, allowing FastAPI to handle requests efficiently.",
+      "answer_v2": "FastAPI expects the values for each parameter as follows: `item_id` should be provided in the URL path (such as `/items/{item_id}`), `q` as an optional string parameter should be sent as a query parameter in the URL (e.g., `/items/{item_id}?q=string_value`), and `item`, which is a Pydantic model, should come from the request body in the JSON format when sending a POST or PUT request.",
+      "forward": {
+        "winner": "tie",
+        "reasoning": "Both answers A and B accurately describe where FastAPI expects each value to come from. They both correctly identify that `item_id` comes from the URL path, `q` comes from the query string, and `item` comes from the request body as a Pydantic model. Both answers are clear, relevant, and appropriately handle the question without introducing unnecessary information. Therefore, neither answer is superior to the other in terms of accuracy, groundedness, relevance, or clarity."
+      },
+      "reverse": {
+        "winner": "tie",
+        "reasoning": "Both answers A and B accurately describe where FastAPI expects each parameter to come from. They both state that `item_id` comes from the URL path, `q` comes from the query string, and `item` comes from the request body as a Pydantic model. Both answers are clear, relevant, and appropriately handle the question without introducing unnecessary information. Therefore, neither answer is better than the other, resulting in a tie."
+      },
+      "overall_winner": "tie"
+    },
+    {
+      "id": "g016",
+      "question": "What is the difference between using def and async def for a FastAPI path operation, and can both be used in the same application?",
+      "ideal_answer": "Both def and async def path operation functions are supported and can be mixed in the same FastAPI application. Use async def when calling code that needs await. A normal def is appropriate for blocking libraries that do not support await; FastAPI runs normal def path operations in an external threadpool instead of calling them directly on the event loop.",
+      "answer_v1": "In FastAPI, using `def` defines a synchronous path operation, which blocks the execution until the request is completed. This is suitable for operations that do not involve waiting for I/O, like CPU-bound tasks. On the other hand, `async def` defines an asynchronous path operation, which allows for non-blocking execution, making it capable of handling I/O-bound tasks efficiently, such as database queries or external API calls. Both can be used in the same application, but mixing them should be done carefully to avoid potential issues with performance and execution flow.",
+      "answer_v2": "In FastAPI, using `def` defines a synchronous path operation function, while `async def` defines an asynchronous path operation function. The `async def` allows for non-blocking operations, enabling the handling of multiple requests concurrently, which is especially beneficial for I/O-bound operations. Both `def` and `async def` can be used in the same FastAPI application, but it's recommended to use `async def` for better performance in I/O-bound scenarios.",
+      "forward": {
+        "winner": "A",
+        "reasoning": "Answer A better matches the expected answer in terms of accuracy and groundedness. It correctly explains that both `def` and `async def` can be used in the same FastAPI application and provides a clear explanation of when to use each. It also mentions that FastAPI runs normal `def` path operations in an external threadpool, which aligns with the expected answer. Answer B, while correct in stating that both can be used and that `async def` is beneficial for I/O-bound operations, lacks the detail about the external threadpool and the specific use cases for `def`, making it less accurate and grounded compared to Answer A."
+      },
+      "reverse": {
+        "winner": "A",
+        "reasoning": "Both answers correctly state that `def` and `async def` can be used in the same FastAPI application and explain the difference between synchronous and asynchronous functions. However, Answer A is more aligned with the expected answer in terms of accuracy and relevance. It correctly mentions that FastAPI runs normal `def` path operations in an external threadpool, which is a key detail in the expected answer. Answer B, while accurate, does not mention this important aspect of how FastAPI handles synchronous functions, making Answer A more grounded and relevant to the expected answer."
+      },
+      "overall_winner": "ambiguous"
+    },
+    {
+      "id": "g017",
+      "question": "Why might a FastAPI application use both Pydantic request models and response models?",
+      "ideal_answer": "A Pydantic request model defines and validates the data received from the client, while a response model or return type defines and validates the data returned by the API and can filter the output to the declared structure. Using both provides explicit contracts for incoming and outgoing data and contributes their schemas to the generated API documentation.",
+      "answer_v1": "A FastAPI application may use both Pydantic request models and response models to clearly define the data structure for incoming requests and outgoing responses, respectively. Request models help validate and parse input data, ensuring that the API receives it in the expected format, while response models provide a consistent format for the data returned to clients, which enhances API documentation and ensures type safety. This separation can also improve code maintainability and clarity by defining distinct roles for request and response data handling.",
+      "answer_v2": "A FastAPI application might use both Pydantic request models and response models to clearly separate validation and serialization concerns. Request models are used to validate and parse incoming data before processing it, ensuring that the data adheres to the expected format and constraints. On the other hand, response models define how the output data should be structured and serialized when sending it back to the client, allowing for additional customization and separation of logic for incoming and outgoing data. This dual approach enhances maintainability and clarity in the codebase.",
+      "forward": {
+        "winner": "A",
+        "reasoning": "Both answers correctly identify the roles of Pydantic request and response models in a FastAPI application, emphasizing validation and structure for incoming and outgoing data. However, Answer A more closely aligns with the expected answer by explicitly mentioning the contribution of these models to API documentation, which is a key point in the expected answer. Answer B focuses more on the separation of validation and serialization concerns, which, while relevant, does not directly address the documentation aspect. Therefore, Answer A is more accurate and relevant to the expected answer."
+      },
+      "reverse": {
+        "winner": "B",
+        "reasoning": "Both answers correctly identify the roles of Pydantic request and response models in a FastAPI application. However, Answer B more closely aligns with the expected answer by emphasizing the contribution of these models to API documentation and type safety, which are key points in the expected answer. Answer A focuses more on the separation of concerns and maintainability, which, while relevant, are not as directly aligned with the expected answer's emphasis on explicit contracts and documentation. Therefore, Answer B is the better match."
+      },
+      "overall_winner": "v1"
+    },
+    {
+      "id": "g018",
+      "question": "If several FastAPI endpoints require the same authentication or validation logic, how can dependencies help avoid duplicating that logic?",
+      "ideal_answer": "The shared authentication or validation logic can be implemented as a dependency and declared with Depends wherever it is required. FastAPI resolves the dependency as part of request processing, allowing multiple path operations to reuse the same logic and its declared requirements without copying the implementation into each endpoint.",
+      "answer_v1": "In FastAPI, dependencies allow you to define reusable authentication or validation logic that can be shared across multiple endpoints. By creating a dependency function that implements the required logic (e.g., checking user permissions, validating tokens), you can use this function as a parameter in any endpoint that requires that logic. This way, the implementation is centralized, reducing code duplication, and making it easier to maintain and update the authentication or validation logic in one place.",
+      "answer_v2": "In FastAPI, dependencies can be used to encapsulate common authentication or validation logic. By defining a dependency function that implements this logic, you can then include this dependency in multiple endpoints. This approach not only reduces code duplication but also promotes better organization and reusability of code, making it easier to maintain and modify the authentication or validation logic in one place.",
+      "forward": {
+        "winner": "tie",
+        "reasoning": "Both answers A and B accurately describe how dependencies in FastAPI can be used to avoid duplicating authentication or validation logic across multiple endpoints. They both mention creating a dependency function and using it across endpoints, which aligns with the expected answer. Both answers are clear, relevant, and appropriately handle the question without going out of scope. Therefore, neither answer is superior to the other in terms of the criteria provided."
+      },
+      "reverse": {
+        "winner": "B",
+        "reasoning": "Both answers A and B correctly describe how dependencies can be used in FastAPI to avoid duplicating authentication or validation logic across multiple endpoints. However, Answer B is slightly more aligned with the expected answer as it explicitly mentions using the dependency function as a parameter in endpoints, which is closer to the expected answer's mention of using 'Depends'. Answer A focuses more on the benefits of organization and reusability, which, while true, are not explicitly part of the expected answer. Therefore, Answer B better matches the expected answer in terms of accuracy and relevance."
+      },
+      "overall_winner": "ambiguous"
+    },
+    {
+      "id": "g019",
+      "question": "What is the current weather in Bengaluru?",
+      "ideal_answer": "I cannot answer this from the available FastAPI documentation. The question requires external weather information that is outside the knowledge base.",
+      "answer_v1": "I currently do not have real-time weather data access. You can check a reliable weather website or app for the most accurate and up-to-date weather information in Bengaluru.",
+      "answer_v2": "The available FastAPI documentation is insufficient to answer this question.",
+      "forward": {
+        "winner": "B",
+        "reasoning": "Answer B directly aligns with the expected answer by stating that the FastAPI documentation is insufficient to answer the question, which is the correct handling of an out-of-scope question. Answer A, while accurate in stating the lack of real-time data access, suggests checking a weather website or app, which is not necessary according to the expected answer. Therefore, Answer B is more relevant and appropriately handles the out-of-scope question."
+      },
+      "reverse": {
+        "winner": "A",
+        "reasoning": "Answer A is more aligned with the expected answer as it correctly identifies that the question is outside the scope of the available FastAPI documentation. It directly addresses the limitation without providing additional information. \n\nAnswer B, while also acknowledging the lack of real-time data access, goes beyond the expected answer by suggesting alternative sources for weather information. This is not required and deviates from the expected response, which emphasizes the limitation of the FastAPI documentation.\n\nTherefore, Answer A better matches the expected answer in terms of accuracy, groundedness, relevance, and appropriate handling of out-of-scope questions."
+      },
+      "overall_winner": "v2"
+    },
+    {
+      "id": "g020",
+      "question": "Which database should I choose for my company's production application?",
+      "ideal_answer": "I cannot determine which database your company should choose from the available FastAPI documentation alone. That decision depends on application requirements and information outside the selected knowledge base.",
+      "answer_v1": "Choosing a database for your production application depends on various factors including data structure, scale, access patterns, and specific application requirements. If your application requires complex queries and transactions, relational databases like PostgreSQL or MySQL are suitable. For unstructured or semi-structured data, NoSQL databases like MongoDB or Cassandra may be better. Additionally, consider scalability and performance needs, as well as the expertise of your development team with specific technologies.",
+      "answer_v2": "The available FastAPI documentation is insufficient to answer this question.",
+      "forward": {
+        "winner": "B",
+        "reasoning": "Answer B aligns perfectly with the expected answer by acknowledging the limitations of the FastAPI documentation in determining the appropriate database choice. It correctly refuses to provide a specific recommendation, which is consistent with the expected answer's emphasis on the need for external information. Answer A, while informative, does not adhere to the expected answer's guidance to refrain from making a recommendation based solely on the FastAPI documentation. Therefore, Answer B is more accurate, grounded, and appropriately handles the out-of-scope nature of the question."
+      },
+      "reverse": {
+        "winner": "A",
+        "reasoning": "Answer A is more aligned with the expected answer as it correctly identifies that the available FastAPI documentation is insufficient to determine which database should be chosen. It appropriately handles the out-of-scope nature of the question by refusing to provide a specific answer based on the documentation alone. \n\nAnswer B, while informative and generally useful, provides a detailed response based on general knowledge rather than acknowledging the limitations of the FastAPI documentation. This makes it less relevant and grounded in the context of the expected answer, which emphasizes the lack of information in the FastAPI documentation to make such a decision."
+      },
+      "overall_winner": "v2"
+    }
+  ]
+}
