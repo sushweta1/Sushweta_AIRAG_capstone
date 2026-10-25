@@ -27,3 +27,6 @@ data/embeddings.json
 
 # Local editor settings
 .vscode/
+
+# Local source backups
+*.w6_backup

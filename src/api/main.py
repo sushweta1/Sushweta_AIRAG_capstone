@@ -31,7 +31,8 @@ from functools import lru_cache
 from fastapi.concurrency import run_in_threadpool
 
 from src.pipeline.cost import compute_cost_usd
-from src.rag.naive_rag import ask_rag, load_index, CHAT_MODEL
+from src.rag.qdrant_rag import ask_rag, CHAT_MODEL
+from src.rag.qdrant_store import load_store
 
 logger = logging.getLogger(__name__)
 
@@ -41,13 +42,10 @@ app = FastAPI(title="Capstone API — W4")
 _settings = Settings()
 _db_path = Path(_settings.results_db)
 
-INDEX_PATH = Path("data/embeddings.json")
-
-
 @lru_cache(maxsize=1)
-def get_rag_index():
-    """Load the saved embedding index once and reuse it."""
-    return load_index(INDEX_PATH)
+def get_rag_store():
+    """Create the Qdrant connection once and reuse it."""
+    return load_store()
 
 
 @app.get("/health")
@@ -64,7 +62,7 @@ async def ask_batched(q: Question) -> Answer:
     rag_result = await run_in_threadpool(
         ask_rag,
         q.question,
-        get_rag_index(),
+        get_rag_store(),
         _settings,
     )
 
