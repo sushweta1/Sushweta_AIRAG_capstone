@@ -1,0 +1,17 @@
+*.bak
+*.email_backup
+*.pyc
+.env
+.venv/
+__pycache__/
+data/embeddings*.json
+data/redaction_review_local.txt
+
+# Original documents containing potentially sensitive information
+data/corpus/
+
+# Original golden-set backup
+data/golden_set_full.original.jsonl
+
+# Historical comparison using unmatched corpora
+docs/experiments/wk8-v1-vs-v2.md
