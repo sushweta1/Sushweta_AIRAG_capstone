@@ -454,7 +454,7 @@ without modifying or recreating historical commits.
 | Week 9 KPI snapshot | Complete |
 | Week 9 ADR | Complete |
 | Week 9 automated security scans | Zero findings |
-| Week 9 GitHub publication | Pending |
+| Week 9 GitHub publication | Completed — PR #2 merged |
 
 Key architectural outcome:
 Dense retrieval remains the recommended default
