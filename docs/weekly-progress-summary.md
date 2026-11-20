@@ -466,3 +466,137 @@ The consolidated development history through Week 9
 provides evidence of implementation, evaluation,
 architectural decisions, troubleshooting and
 incremental repository integration.
+
+---
+
+# Week 10 — Semantic Caching and Knowledge Lifecycle
+
+## Objective
+
+Extend the RAG capstone with response caching, knowledge-base
+versioning, document updates, tombstones, and cache invalidation.
+
+Preserve previous Week 8/9 functionality and collections.
+
+## Architecture and implementation
+
+### Semantic response caching
+
+- Implemented SQLite-backed response caching.
+- Added exact-match lookup before semantic similarity matching.
+- Selected cosine similarity threshold of 0.95.
+- Scoped cache entries by KB version and pipeline configuration.
+- Restricted caching to supported deterministic configurations.
+- Added cache-hit, match-type, and similarity metadata.
+
+### Knowledge lifecycle management
+
+- Created isolated Qdrant collection `capstone_chunks_v10`.
+- Preserved earlier collections.
+- Added `deleted_at` tombstones for superseded documents.
+- Implemented live-only dense and hybrid retrieval.
+- Added controlled document replacement with preview and confirmation.
+- Implemented cache invalidation and persistent KB-version advancement.
+- Added rollback attempts for failed updates.
+
+### Lifecycle demonstration
+
+Used a synthetic learning policy to verify document freshness.
+
+- Original annual allowance: INR 12,000.
+- Updated annual allowance: INR 18,000.
+- Previous chunks tombstoned.
+- Replacement chunks indexed.
+- Cache invalidated.
+- Updated answer reflected INR 18,000.
+- Repeated question produced an exact cache hit.
+
+The demonstration document was subsequently removed from live retrieval.
+
+## Evaluation
+
+Evaluated 20 golden questions using dense top-3 retrieval.
+
+| Metric | Result |
+|---|---|
+| Expected-source retrieval hit rate | 100% |
+| Cold cache hit rate | 0% |
+| Warm exact cache hit rate | 100% |
+| Cold mean latency | 2453.55 ms |
+| Warm mean latency | 0.25 ms |
+| Cold p50 / p95 | 2174 / 3384 ms |
+| Cold estimated chat cost | USD 0.00151245 total |
+| Warm additional chat cost | USD 0 |
+| Cold/warm answer consistency | 100% |
+| Provisional strict task success | 75% |
+
+The warm benchmark repeated the same questions exactly.
+It does not establish semantic paraphrase cache performance.
+
+Embedding costs are excluded from the reported chat costs.
+
+## Answer-quality findings
+
+Manual comparison against golden answers identified:
+
+- 15 fully correct answers.
+- 2 partially correct answers.
+- 3 answers incorrect against the golden references.
+
+Important distinctions:
+
+- q09: indexed source states USD 80, while the golden answer expects GBP 80.
+- q10: expected 30-day deadline absent from indexed evidence.
+- q12: indexed expense-policy approval threshold appears truncated.
+- q14: VPN helpdesk hours present in evidence but omitted from the answer.
+- q17: hotline number redacted as `[PHONE]`, conflicting with golden expectations.
+
+The original expense-policy PDF was unavailable during investigation.
+The cause of its incomplete indexed passages remains unresolved.
+
+Retrieval success and answer correctness are tracked separately.
+
+## Verification
+
+- Existing Week 9 and Week 10 tests: 70 passed.
+- New ingestion-integrity regression tests: 4 passed.
+- Final combined test suite: 74 passed.
+- Git ignore rules verified for credentials and generated state.
+- Staged files scanned for common secret patterns: zero findings.
+
+The ingestion-integrity tests validate synthetic cases and do not
+prove completeness of the unavailable original expense-policy PDF.
+
+## Architecture decisions
+
+Documented decisions include:
+
+- Conservative semantic cache threshold.
+- Exact-match-first lookup.
+- Version-aware cache scope.
+- Explicit invalidation after knowledge updates.
+- Tombstones rather than routine hard deletion.
+- Live-only retrieval.
+- Dense retrieval as the evaluated default.
+- Separation of retrieval, freshness, and answer-quality KPIs.
+
+Known limitations include non-atomic updates across storage
+components, semantic false-match risk, source-integrity uncertainty,
+and limited benchmark representativeness.
+
+## Documentation
+
+- `week10/docs/kpi/wk10-snapshot.md`
+- `week10/docs/adr/ADR-001-week10-cache-lifecycle.md`
+- `week10/docs/runbooks/week10-knowledge-lifecycle.md`
+- `week10/tests/test_ingestion_integrity.py`
+
+## Week 10 completion status
+
+Implementation, controlled evaluation, documentation, and
+74-test verification are complete.
+
+Git commit, pull request, and merge remain pending.
+
+This entry records the pre-merge state and should be updated
+after GitHub integration is confirmed.
