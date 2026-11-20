@@ -596,7 +596,14 @@ and limited benchmark representativeness.
 Implementation, controlled evaluation, documentation, and
 74-test verification are complete.
 
-Git commit, pull request, and merge remain pending.
+GitHub integration completed successfully.
 
-This entry records the pre-merge state and should be updated
-after GitHub integration is confirmed.
+- Branch: `integrate-week10`
+- Implementation commit: `52729dc`
+- Pull request: #3
+- Target branch: `main`
+- Merge commit: `cf0db48`
+- Local `main` synchronized with `origin/main`
+- Final automated verification: 74/74 tests passed
+
+Week 10 is complete and integrated into the main capstone repository.
